@@ -1039,7 +1039,7 @@ dependencies = [
 [[package]]
 name = "collections"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=7eea897d4765f59dc9dac1ca468a91e84bb518a6#7eea897d4765f59dc9dac1ca468a91e84bb518a6"
+source = "git+https://github.com/sonorahq/gpui?rev=5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef#5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef"
 dependencies = [
  "gpui_util",
  "indexmap",
@@ -1623,7 +1623,7 @@ dependencies = [
 [[package]]
 name = "derive_refineable"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=7eea897d4765f59dc9dac1ca468a91e84bb518a6#7eea897d4765f59dc9dac1ca468a91e84bb518a6"
+source = "git+https://github.com/sonorahq/gpui?rev=5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef#5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2481,7 +2481,7 @@ dependencies = [
 [[package]]
 name = "gpui"
 version = "0.2.2"
-source = "git+https://github.com/sonorahq/gpui?rev=7eea897d4765f59dc9dac1ca468a91e84bb518a6#7eea897d4765f59dc9dac1ca468a91e84bb518a6"
+source = "git+https://github.com/sonorahq/gpui?rev=5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef#5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef"
 dependencies = [
  "accesskit",
  "anyhow",
@@ -2546,7 +2546,7 @@ dependencies = [
 [[package]]
 name = "gpui_apple"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=7eea897d4765f59dc9dac1ca468a91e84bb518a6#7eea897d4765f59dc9dac1ca468a91e84bb518a6"
+source = "git+https://github.com/sonorahq/gpui?rev=5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef#5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef"
 dependencies = [
  "anyhow",
  "async-task",
@@ -2587,7 +2587,7 @@ dependencies = [
 [[package]]
 name = "gpui_linux"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=7eea897d4765f59dc9dac1ca468a91e84bb518a6#7eea897d4765f59dc9dac1ca468a91e84bb518a6"
+source = "git+https://github.com/sonorahq/gpui?rev=5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef#5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef"
 dependencies = [
  "accesskit",
  "accesskit_unix",
@@ -2631,7 +2631,7 @@ dependencies = [
 [[package]]
 name = "gpui_macos"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=7eea897d4765f59dc9dac1ca468a91e84bb518a6#7eea897d4765f59dc9dac1ca468a91e84bb518a6"
+source = "git+https://github.com/sonorahq/gpui?rev=5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef#5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef"
 dependencies = [
  "accesskit",
  "accesskit_macos",
@@ -2670,7 +2670,7 @@ dependencies = [
 [[package]]
 name = "gpui_macros"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=7eea897d4765f59dc9dac1ca468a91e84bb518a6#7eea897d4765f59dc9dac1ca468a91e84bb518a6"
+source = "git+https://github.com/sonorahq/gpui?rev=5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef#5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef"
 dependencies = [
  "heck 0.5.0",
  "proc-macro2",
@@ -2681,7 +2681,7 @@ dependencies = [
 [[package]]
 name = "gpui_platform"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=7eea897d4765f59dc9dac1ca468a91e84bb518a6#7eea897d4765f59dc9dac1ca468a91e84bb518a6"
+source = "git+https://github.com/sonorahq/gpui?rev=5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef#5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef"
 dependencies = [
  "anyhow",
  "gpui",
@@ -2693,7 +2693,7 @@ dependencies = [
 [[package]]
 name = "gpui_shared_string"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=7eea897d4765f59dc9dac1ca468a91e84bb518a6#7eea897d4765f59dc9dac1ca468a91e84bb518a6"
+source = "git+https://github.com/sonorahq/gpui?rev=5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef#5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef"
 dependencies = [
  "schemars",
  "serde",
@@ -2703,7 +2703,7 @@ dependencies = [
 [[package]]
 name = "gpui_util"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=7eea897d4765f59dc9dac1ca468a91e84bb518a6#7eea897d4765f59dc9dac1ca468a91e84bb518a6"
+source = "git+https://github.com/sonorahq/gpui?rev=5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef#5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef"
 dependencies = [
  "anyhow",
  "log",
@@ -2713,7 +2713,7 @@ dependencies = [
 [[package]]
 name = "gpui_wgpu"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=7eea897d4765f59dc9dac1ca468a91e84bb518a6#7eea897d4765f59dc9dac1ca468a91e84bb518a6"
+source = "git+https://github.com/sonorahq/gpui?rev=5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef#5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef"
 dependencies = [
  "anyhow",
  "bytemuck",
@@ -2740,7 +2740,7 @@ dependencies = [
 [[package]]
 name = "gpui_windows"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=7eea897d4765f59dc9dac1ca468a91e84bb518a6#7eea897d4765f59dc9dac1ca468a91e84bb518a6"
+source = "git+https://github.com/sonorahq/gpui?rev=5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef#5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef"
 dependencies = [
  "accesskit",
  "accesskit_windows",
@@ -2759,6 +2759,7 @@ dependencies = [
  "raw-window-handle",
  "scheduler",
  "smallvec",
+ "unicode-bidi",
  "uuid 1.24.0",
  "windows 0.62.2",
  "windows-core 0.62.2",
@@ -2990,7 +2991,7 @@ dependencies = [
 [[package]]
 name = "http_client"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=7eea897d4765f59dc9dac1ca468a91e84bb518a6#7eea897d4765f59dc9dac1ca468a91e84bb518a6"
+source = "git+https://github.com/sonorahq/gpui?rev=5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef#5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef"
 dependencies = [
  "anyhow",
  "bytes",
@@ -6084,7 +6085,7 @@ dependencies = [
 [[package]]
 name = "refineable"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=7eea897d4765f59dc9dac1ca468a91e84bb518a6#7eea897d4765f59dc9dac1ca468a91e84bb518a6"
+source = "git+https://github.com/sonorahq/gpui?rev=5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef#5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef"
 dependencies = [
  "derive_refineable",
 ]
@@ -6642,7 +6643,7 @@ dependencies = [
 [[package]]
 name = "scheduler"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=7eea897d4765f59dc9dac1ca468a91e84bb518a6#7eea897d4765f59dc9dac1ca468a91e84bb518a6"
+source = "git+https://github.com/sonorahq/gpui?rev=5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef#5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef"
 dependencies = [
  "async-task",
  "backtrace",
@@ -7314,7 +7315,7 @@ checksum = "13c2bddecc57b384dee18652358fb23172facb8a2c51ccc10d74c157bdea3292"
 [[package]]
 name = "sum_tree"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=7eea897d4765f59dc9dac1ca468a91e84bb518a6#7eea897d4765f59dc9dac1ca468a91e84bb518a6"
+source = "git+https://github.com/sonorahq/gpui?rev=5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef#5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef"
 dependencies = [
  "heapless",
  "rayon",
@@ -8229,6 +8230,7 @@ dependencies = [
  "objc2-app-kit 0.3.2",
  "qrcodegen",
  "serde",
+ "unicode-bidi",
  "unicode-segmentation",
  "windows-sys 0.61.2",
 ]
@@ -8515,6 +8517,7 @@ dependencies = [
  "router",
  "state",
  "ui",
+ "unicode-bidi",
 ]
 
 [[package]]
@@ -9833,7 +9836,7 @@ dependencies = [
 [[package]]
 name = "ytmusic"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/ytmusic-rs?rev=8553a96#8553a967e9ab980e4f94283821e3f6c698b7c40c"
+source = "git+https://github.com/sonorahq/ytmusic-rs?rev=a8fb6f5#a8fb6f570abc828b3e899a112f9c8dfbb2e17439"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -10117,7 +10120,7 @@ checksum = "29666d0abbfad1e3dc4dcf6144730dd3a3ab225bbbdac83319345b1b44ccfc1b"
 [[package]]
 name = "ztracing"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=7eea897d4765f59dc9dac1ca468a91e84bb518a6#7eea897d4765f59dc9dac1ca468a91e84bb518a6"
+source = "git+https://github.com/sonorahq/gpui?rev=5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef#5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef"
 dependencies = [
  "tracing",
  "ztracing_macro",
@@ -10126,7 +10129,7 @@ dependencies = [
 [[package]]
 name = "ztracing_macro"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=7eea897d4765f59dc9dac1ca468a91e84bb518a6#7eea897d4765f59dc9dac1ca468a91e84bb518a6"
+source = "git+https://github.com/sonorahq/gpui?rev=5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef#5fc4ef6cd82dc1e5bfe8cb756d81a1cb3c6ca8ef"
 
 [[package]]
 name = "zune-core"

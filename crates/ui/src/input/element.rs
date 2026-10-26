@@ -11,7 +11,7 @@ use crate::button::Button;
 use crate::glass::{blurring, glass};
 use crate::input::{
     CARET, CARET_LINES, Copy, Cut, INPUT_CONTEXT, Input, Paste, SelectAll, clamp_offset,
-    clamp_range, masked_text, primary_paste,
+    clamp_range, masked_text, primary_paste, span,
 };
 use crate::menu::{Menu, MenuItem};
 use crate::popup::Popup;
@@ -176,10 +176,7 @@ impl Element for Text {
             ),
             false => (
                 Some(fill(
-                    Bounds::from_corners(
-                        point(left + line.x_for_index(selected.start), bounds.top()),
-                        point(left + line.x_for_index(selected.end), bounds.bottom()),
-                    ),
+                    span(&line, selected, left, bounds),
                     theme.selection.opacity(0.4),
                 )),
                 None,

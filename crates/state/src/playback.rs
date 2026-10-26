@@ -146,6 +146,8 @@ const LISTED_FILES: usize = 5;
 /// How many tracks' signal reports are kept: the one playing, the one queued behind it, and
 /// room for a skip that has not been heard yet.
 const SIGNALS: usize = 4;
+/// The FAQ entry on why Spotify may refuse an account the keys to its audio.
+const KEYS_FAQ: &str = "https://sonorahq.org/faq#spotify-playback-keys";
 
 /// A track the engine was asked to fetch ahead, and whether it was also lined up to follow the
 /// current one gaplessly.
@@ -3215,7 +3217,12 @@ impl Playback {
                  this session"
             );
         }
-        Toasts::show(Outcome::Failed, "toast-keys-refused", cx);
+        Toasts::post(
+            Toast::new(Outcome::Failed, "toast-keys-error")
+                .note("toast-keys-refused")
+                .visit("toast-why", KEYS_FAQ),
+            cx,
+        );
         cx.notify();
     }
 }

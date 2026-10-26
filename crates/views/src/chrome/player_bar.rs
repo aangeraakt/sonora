@@ -4,6 +4,7 @@ use std::rc::Rc;
 use router::{Destination, Link, navigate};
 use std::time::Duration;
 use ui::ActiveTheme as _;
+use ui::Tails as _;
 
 use gpui::prelude::*;
 use gpui::{
@@ -342,7 +343,8 @@ impl PlayerBar {
                 )
                 .child(SharedString::from(track.name.clone()))
                 .min_w_0()
-                .truncate(),
+                .truncate()
+                .tails(),
             None => div()
                 .id("now-playing-album")
                 .child(t!("player-nothing-playing"))

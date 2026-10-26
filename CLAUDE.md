@@ -136,6 +136,7 @@ Bullets are lowercase, imperative, one line each, and describe behaviour rather 
 ## Changelog
 
 `CHANGELOG.md` follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Add to
-`## [Unreleased]` as features land, under `Added`, `Changed` or `Fixed`. Entries say what someone
-using Sonora can now do, in one or two short sentences, since the notes are posted to Discord.
-Leave out work no user can observe. Cutting a release is the `release-sonora` skill.
+`## [Unreleased]` as features land, under `Added`, `Changed` or `Fixed`. Each entry is one short
+line saying what someone using Sonora can now do, since the notes are posted to Discord. Leave out
+implementation details and any work no user can observe. Cutting a release is the
+`release-sonora` skill.
