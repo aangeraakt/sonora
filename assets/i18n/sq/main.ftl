@@ -103,6 +103,7 @@ menu-add-tracks-to-playlist = { $count ->
    *[other] Shto { $count } këngë te lista e luajtjes
 }
 menu-new-playlist = Listë e re luajtjeje
+menu-import-playlist = Importo listë luajtjeje…
 menu-edit-tags = Ndrysho etiketat
 menu-attach-lyrics-file = Përdor një skedar tekstesh…
 menu-replace-lyrics-file = Përdor një skedar tjetër tekstesh…
@@ -169,6 +170,7 @@ menu-select-all = Përzgjidh të gjitha
 menu-remove-from-queue = Hiq nga radha
 menu-rename-playlist = Riemërto listën e luajtjes
 menu-delete-playlist = Fshi listën e luajtjes
+menu-export-playlist = Eksporto listën e luajtjes…
 menu-add-playlist-to-library = Shto te Biblioteka
 menu-remove-playlist-from-library = Hiq nga Biblioteka
 menu-library-add = Shto te Biblioteka
@@ -1092,6 +1094,13 @@ toast-playlist-signed-out = Hyr për të ndryshuar listat e luajtjes
 toast-lyrics-file-attached = Kjo këngë tani shfaq skedarin tënd të teksteve
 toast-lyrics-file-removed = Skedari i teksteve u hoq
 toast-lyrics-file-failed = Ai skedar tekstesh nuk mund të përdorej
+toast-playlist-imported = U importua { $name }
+toast-playlist-imported-partly = U importua { $name }, pa { $count ->
+        [one] një këngë që nuk është
+       *[other] { $count } këngë që nuk janë
+    } në bibliotekën tënde
+toast-playlist-import-empty = Asnjë këngë nga { $name } nuk është në bibliotekën tënde
+toast-playlist-exported = Lista e luajtjes u eksportua
 toast-file-dialog-failed = Dritarja e skedarëve nuk mund të hapej
 toast-queued-track = { $name } u shtua në radhë
 toast-next-track = { $name } luhet e radhës

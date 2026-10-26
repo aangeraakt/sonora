@@ -104,6 +104,7 @@ menu-add-tracks-to-playlist = { $count ->
    *[other] Добавить { $count } треков в плейлист
 }
 menu-new-playlist = Новый плейлист
+menu-import-playlist = Импортировать плейлист…
 menu-edit-tags = Изменить теги
 menu-attach-lyrics-file = Использовать файл текста…
 menu-replace-lyrics-file = Использовать другой файл текста…
@@ -179,6 +180,7 @@ menu-select-all = Выделить всё
 menu-remove-from-queue = Убрать из очереди
 menu-rename-playlist = Переименовать плейлист
 menu-delete-playlist = Удалить плейлист
+menu-export-playlist = Экспортировать плейлист…
 menu-add-playlist-to-library = Добавить в медиатеку
 menu-remove-playlist-from-library = Удалить из медиатеки
 menu-library-add = Добавить в медиатеку
@@ -1128,6 +1130,13 @@ toast-playlist-signed-out = Войдите, чтобы менять плейли
 toast-lyrics-file-attached = Теперь для этого трека показывается ваш файл текста
 toast-lyrics-file-removed = Файл текста убран
 toast-lyrics-file-failed = Не удалось использовать этот файл текста
+toast-playlist-imported = Плейлист { $name } импортирован
+toast-playlist-imported-partly = Плейлист { $name } импортирован без { $count ->
+        [one] { $count } трека, которого
+       *[other] { $count } треков, которых
+    } нет в медиатеке
+toast-playlist-import-empty = Ни одного трека из { $name } нет в медиатеке
+toast-playlist-exported = Плейлист экспортирован
 toast-file-dialog-failed = Не удалось открыть окно выбора файла
 toast-queued-track = { $name } добавлен в очередь
 toast-next-track = { $name } прозвучит следующим

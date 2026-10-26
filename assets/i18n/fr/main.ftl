@@ -103,6 +103,7 @@ menu-add-tracks-to-playlist = { $count ->
    *[other] Ajouter { $count } titres à une playlist
 }
 menu-new-playlist = Nouvelle playlist
+menu-import-playlist = Importer une playlist…
 menu-edit-tags = Modifier les tags
 menu-attach-lyrics-file = Utiliser un fichier de paroles…
 menu-replace-lyrics-file = Utiliser un autre fichier de paroles…
@@ -172,6 +173,7 @@ menu-select-all = Tout sélectionner
 menu-remove-from-queue = Retirer de la file d'attente
 menu-rename-playlist = Renommer la playlist
 menu-delete-playlist = Supprimer la playlist
+menu-export-playlist = Exporter la playlist…
 menu-add-playlist-to-library = Ajouter à la bibliothèque
 menu-remove-playlist-from-library = Retirer de la bibliothèque
 menu-library-add = Ajouter à la bibliothèque
@@ -1096,6 +1098,13 @@ toast-playlist-signed-out = Connectez-vous pour modifier des playlists
 toast-lyrics-file-attached = Ce titre affiche maintenant votre fichier de paroles
 toast-lyrics-file-removed = Fichier de paroles retiré
 toast-lyrics-file-failed = Impossible d'utiliser ce fichier de paroles
+toast-playlist-imported = Import terminé : { $name }
+toast-playlist-imported-partly = Import terminé : { $name }, sans { $count ->
+        [one] un titre absent
+       *[other] { $count } titres absents
+    } de votre bibliothèque
+toast-playlist-import-empty = Aucun titre de { $name } n'est dans votre bibliothèque
+toast-playlist-exported = Playlist exportée
 toast-file-dialog-failed = Impossible d'ouvrir la boîte de dialogue
 toast-queued-track = { $name } ajouté à la file d'attente
 toast-next-track = { $name } sera lu juste après

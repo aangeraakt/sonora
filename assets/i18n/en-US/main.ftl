@@ -103,6 +103,7 @@ menu-add-tracks-to-playlist = { $count ->
    *[other] Add { $count } tracks to playlist
 }
 menu-new-playlist = New playlist
+menu-import-playlist = Import playlist…
 menu-edit-tags = Edit tags
 menu-attach-lyrics-file = Use a lyrics file…
 menu-replace-lyrics-file = Use another lyrics file…
@@ -169,6 +170,7 @@ menu-select-all = Select all
 menu-remove-from-queue = Remove from queue
 menu-rename-playlist = Rename playlist
 menu-delete-playlist = Delete playlist
+menu-export-playlist = Export playlist…
 menu-add-playlist-to-library = Add to Library
 menu-remove-playlist-from-library = Remove from Library
 menu-library-add = Add to Library
@@ -1092,6 +1094,13 @@ toast-playlist-signed-out = Sign in to change playlists
 toast-lyrics-file-attached = This song now shows your lyrics file
 toast-lyrics-file-removed = Lyrics file removed
 toast-lyrics-file-failed = Could not use that lyrics file
+toast-playlist-imported = Imported { $name }
+toast-playlist-imported-partly = Imported { $name }, leaving out { $count ->
+        [one] one song
+       *[other] { $count } songs
+    } not in your library
+toast-playlist-import-empty = None of the songs in { $name } are in your library
+toast-playlist-exported = Playlist exported
 toast-file-dialog-failed = Could not open the file dialog
 toast-queued-track = { $name } added to the queue
 toast-next-track = { $name } plays next

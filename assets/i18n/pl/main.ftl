@@ -104,6 +104,7 @@ menu-add-tracks-to-playlist = { $count ->
    *[other] Dodaj { $count } utworów do playlisty
 }
 menu-new-playlist = Nowa playlista
+menu-import-playlist = Importuj playlistę…
 menu-edit-tags = Edytuj tagi
 menu-attach-lyrics-file = Użyj pliku z tekstem…
 menu-replace-lyrics-file = Użyj innego pliku z tekstem…
@@ -179,6 +180,7 @@ menu-select-all = Zaznacz wszystko
 menu-remove-from-queue = Usuń z kolejki
 menu-rename-playlist = Zmień nazwę playlisty
 menu-delete-playlist = Usuń playlistę
+menu-export-playlist = Eksportuj playlistę…
 menu-add-playlist-to-library = Dodaj do biblioteki
 menu-remove-playlist-from-library = Usuń z biblioteki
 menu-library-add = Dodaj do biblioteki
@@ -1128,6 +1130,13 @@ toast-playlist-signed-out = Zaloguj się, aby zmieniać playlisty
 toast-lyrics-file-attached = Ten utwór pokazuje teraz twój plik z tekstem
 toast-lyrics-file-removed = Usunięto plik z tekstem
 toast-lyrics-file-failed = Nie udało się użyć tego pliku z tekstem
+toast-playlist-imported = Zaimportowano { $name }
+toast-playlist-imported-partly = Zaimportowano { $name } bez { $count ->
+        [one] jednego utworu, którego
+       *[other] { $count } utworów, których
+    } nie ma w bibliotece
+toast-playlist-import-empty = Żadnego utworu z { $name } nie ma w bibliotece
+toast-playlist-exported = Wyeksportowano playlistę
 toast-file-dialog-failed = Nie udało się otworzyć okna wyboru pliku
 toast-queued-track = { $name } dodano do kolejki
 toast-next-track = { $name } zabrzmi następny

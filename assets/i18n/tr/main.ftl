@@ -100,6 +100,7 @@ column-tracks = Parçalar
 menu-add-to-playlist = Çalma listesine ekle
 menu-add-tracks-to-playlist = { $count } parçayı çalma listesine ekle
 menu-new-playlist = Yeni çalma listesi
+menu-import-playlist = Çalma listesini içe aktar…
 menu-edit-tags = Etiketleri düzenle
 menu-attach-lyrics-file = Şarkı sözü dosyası kullan…
 menu-replace-lyrics-file = Başka bir şarkı sözü dosyası kullan…
@@ -145,6 +146,7 @@ menu-select-all = Tümünü seç
 menu-remove-from-queue = Sıradan çıkar
 menu-rename-playlist = Çalma listesini yeniden adlandır
 menu-delete-playlist = Çalma listesini sil
+menu-export-playlist = Çalma listesini dışa aktar…
 menu-add-playlist-to-library = Kitaplığa ekle
 menu-remove-playlist-from-library = Kitaplıktan çıkar
 menu-library-add = Kitaplığa ekle
@@ -1067,6 +1069,13 @@ toast-playlist-signed-out = Çalma listelerini değiştirmek için oturum aç
 toast-lyrics-file-attached = Bu şarkı artık senin şarkı sözü dosyanı gösteriyor
 toast-lyrics-file-removed = Şarkı sözü dosyası kaldırıldı
 toast-lyrics-file-failed = Bu şarkı sözü dosyası kullanılamadı
+toast-playlist-imported = { $name } içe aktarıldı
+toast-playlist-imported-partly = { $name } içe aktarıldı, kitaplığında olmayan { $count ->
+        [one] bir şarkı
+       *[other] { $count } şarkı
+    } dışarıda bırakıldı
+toast-playlist-import-empty = { $name } içindeki şarkıların hiçbiri kitaplığında yok
+toast-playlist-exported = Çalma listesi dışa aktarıldı
 toast-file-dialog-failed = Dosya penceresi açılamadı
 toast-queued-track = { $name } sıraya eklendi
 toast-next-track = Sırada { $name } çalacak

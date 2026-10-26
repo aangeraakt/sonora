@@ -104,6 +104,7 @@ menu-add-tracks-to-playlist = { $count ->
    *[other] Přidat { $count } skladeb do playlistu
 }
 menu-new-playlist = Nový playlist
+menu-import-playlist = Importovat playlist…
 menu-edit-tags = Upravit tagy
 menu-attach-lyrics-file = Použít soubor s textem…
 menu-replace-lyrics-file = Použít jiný soubor s textem…
@@ -183,6 +184,7 @@ menu-select-all = Vybrat vše
 menu-remove-from-queue = Odebrat z fronty
 menu-rename-playlist = Přejmenovat playlist
 menu-delete-playlist = Smazat playlist
+menu-export-playlist = Exportovat playlist…
 menu-add-playlist-to-library = Přidat do knihovny
 menu-remove-playlist-from-library = Odebrat z knihovny
 menu-library-add = Přidat do knihovny
@@ -1126,6 +1128,13 @@ toast-playlist-signed-out = Pro změnu playlistů se přihlas
 toast-lyrics-file-attached = Tato skladba teď ukazuje tvůj soubor s textem
 toast-lyrics-file-removed = Soubor s textem odebrán
 toast-lyrics-file-failed = Tento soubor s textem se nepodařilo použít
+toast-playlist-imported = Importováno: { $name }
+toast-playlist-imported-partly = Importováno: { $name }, bez { $count ->
+        [one] jedné skladby, která není
+       *[other] { $count } skladeb, které nejsou
+    } v tvé knihovně
+toast-playlist-import-empty = Žádná skladba z { $name } není v tvé knihovně
+toast-playlist-exported = Playlist exportován
 toast-file-dialog-failed = Dialog pro výběr souboru se nepodařilo otevřít
 toast-queued-track = Do fronty přidáno: { $name }
 toast-next-track = { $name } se přehraje jako další
