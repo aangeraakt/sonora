@@ -302,6 +302,7 @@ impl ArtistCatalogue {
 pub enum Lyrics {
     Plain {
         text: String,
+        /// One line for each line of `text`, blank where that line needs no romanization.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         romanized: Option<RomanizedText>,
     },

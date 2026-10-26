@@ -1,5 +1,7 @@
 use gpui::prelude::*;
-use gpui::{App, ClickEvent, ClipboardItem, Context, Entity, SharedString, Window};
+use gpui::{
+    App, ClickEvent, ClipboardItem, Context, Entity, PathPromptOptions, SharedString, Window,
+};
 use i18n::t;
 use music::{Album, GenreItem, MediaKind, Playlist, SavedArtist, Track};
 use router::{Destination, navigate};
@@ -470,6 +472,11 @@ impl ItemMenu {
                 .on_click(move |_, window, cx| TagEditor::open(track.clone(), window, cx))
         });
 
+        let lyrics_file = match (many, track.id.clone()) {
+            (false, Some(id)) => lyrics_file_items(id, cx),
+            _ => Vec::new(),
+        };
+
         let delete_files = imported.then(|| {
             let ids = ids.clone();
             MenuItem::new(
@@ -508,6 +515,7 @@ impl ItemMenu {
                 details
                     .into_iter()
                     .chain(edit)
+                    .chain(lyrics_file)
                     .chain(copy)
                     .chain(delete_files)
                     .collect(),
@@ -1299,6 +1307,60 @@ pub(crate) fn new_playlist_menu(
             .icon("icons/plus.svg")
             .on_click(on_create),
     )
+}
+
+/// Attaching a lyrics file of the listener's own to a track, or, once one is attached,
+/// replacing it and taking it off.
+fn lyrics_file_items(id: String, cx: &App) -> Vec<MenuItem> {
+    let attached = Sonora::global(cx).lyrics.read(cx).has_file(&id, cx);
+    let choose = MenuItem::new(
+        "attach-lyrics-file",
+        match attached {
+            true => t!("menu-replace-lyrics-file"),
+            false => t!("menu-attach-lyrics-file"),
+        },
+    )
+    .icon("icons/mic-vocal.svg")
+    .on_click({
+        let id = id.clone();
+        move |_, _, cx| choose_lyrics_file(id.clone(), cx)
+    });
+    let remove = attached.then(|| {
+        MenuItem::new("detach-lyrics-file", t!("menu-detach-lyrics-file"))
+            .icon("icons/mic-off.svg")
+            .on_click(move |_, _, cx| {
+                let lyrics = Sonora::global(cx).lyrics.clone();
+                lyrics.update(cx, |lyrics, cx| lyrics.detach_file(id.clone(), cx));
+            })
+    });
+    std::iter::once(choose).chain(remove).collect()
+}
+
+/// Asks for an `.lrc` file and attaches it to the track.
+fn choose_lyrics_file(id: String, cx: &mut App) {
+    let receiver = cx.prompt_for_paths(PathPromptOptions {
+        files: true,
+        directories: false,
+        multiple: false,
+        prompt: None,
+    });
+    let lyrics = Sonora::global(cx).lyrics.clone();
+    cx.spawn(async move |cx| {
+        let path = match receiver.await {
+            Ok(Ok(Some(paths))) => paths.into_iter().next(),
+            Ok(Err(error)) => {
+                log::warn!("lyrics: cannot open the file dialog: {error:#}");
+                cx.update(|cx| Toasts::show(Outcome::Failed, "toast-file-dialog-failed", cx));
+                None
+            }
+            _ => None,
+        };
+        let Some(path) = path else {
+            return;
+        };
+        lyrics.update(cx, |lyrics, cx| lyrics.attach_file(id, path, cx));
+    })
+    .detach();
 }
 
 /// What a download item in a menu acts on as a whole.

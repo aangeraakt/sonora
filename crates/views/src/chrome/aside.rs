@@ -49,6 +49,8 @@ const AHEAD: f32 = 0.6;
 const REVEAL: f32 = 0.6;
 const ACTIVE_VERSE_GROWTH: Pixels = px(2.);
 const FULLSCREEN_VERSE_GROWTH: Pixels = px(3.);
+/// How much larger than the lane text unsynced lyrics are set, while staying below a synced verse.
+const PLAIN_LYRICS_GROWTH: f32 = 1.15;
 const LYRICS_HORIZONTAL_INSET_REM: f32 = 1.5;
 // The largest window fullscreen lyrics keep their own size in. A larger one grows them by its
 // share of this one, so a verse keeps its size relative to the window.
@@ -1670,6 +1672,11 @@ impl Aside {
             (None, LyricsState::Ready) => {
                 match self.lyrics.read(cx).current().map(|hit| &hit.lyrics) {
                     Some(music::Lyrics::Plain { text, romanized }) => {
+                        let romanized = selected_romanization(romanized, romanization_scripts);
+                        let romanized_lines = romanized
+                            .as_deref()
+                            .map_or_else(Vec::new, |text| text.lines().collect::<Vec<_>>());
+                        let plain_size = (lane_size * PLAIN_LYRICS_GROWTH).round();
                         // gpui wraps text by assuming each glyph sits right of the one before it,
                         // which right-to-left text breaks, so such lyrics are wrapped here
                         let rows = has_right_to_left(text).then(|| {
@@ -1677,7 +1684,7 @@ impl Aside {
                                 .map(|line| {
                                     lyrics_wrap_rows(
                                         &lyrics_parts(line, None),
-                                        lane_size,
+                                        plain_size,
                                         wrap_width,
                                         window,
                                     )
@@ -1697,23 +1704,42 @@ impl Aside {
                                 .flex()
                                 .flex_col()
                                 .gap_1()
-                                .text_size(lane_size)
+                                .text_size(plain_size)
                                 .font_weight(FontWeight::SEMIBOLD)
-                                .text_color(theme.muted_foreground)
+                                .text_color(theme.foreground)
                                 .when(sung.mirrored, |this| this.text_right())
-                                .map(|this| match &rows {
-                                    Some(rows) => this
-                                        .children(rows.iter().map(|rows| {
-                                            fixed_lyrics_lane(rows, Voice::Lead, sung)
-                                        })),
-                                    None => this.child(SharedString::from(text.clone())),
+                                .map(|this| match (&rows, romanized.is_some()) {
+                                    (None, false) => this.child(SharedString::from(text.clone())),
+                                    _ => this.children(text.lines().enumerate().map(
+                                        |(index, line)| {
+                                            let spoken = match &rows {
+                                                Some(rows) => fixed_lyrics_lane(
+                                                    &rows[index],
+                                                    Voice::Lead,
+                                                    sung,
+                                                ),
+                                                None => {
+                                                    div().child(SharedString::from(line.to_owned()))
+                                                }
+                                            };
+                                            div().flex().flex_col().child(spoken).when_some(
+                                                romanized_lines
+                                                    .get(index)
+                                                    .filter(|line| !line.is_empty()),
+                                                |this, line| {
+                                                    this.child(
+                                                        romanized_lyrics_lane(
+                                                            (*line).to_owned(),
+                                                            lane_size,
+                                                            &theme,
+                                                        )
+                                                        .font_weight(FontWeight::NORMAL),
+                                                    )
+                                                },
+                                            )
+                                        },
+                                    )),
                                 })
-                                .when_some(
-                                    selected_romanization(romanized, romanization_scripts),
-                                    |this, text| {
-                                        this.child(romanized_lyrics_lane(text, lane_size, &theme))
-                                    },
-                                )
                                 .into_any_element(),
                         ]
                     }
@@ -2651,9 +2677,10 @@ fn selected_romanization(
 
 /// Which source a sheet came from and, when it names them, who wrote the song.
 fn credit_lines(source: &str, writers: &[String]) -> (SharedString, Option<SharedString>) {
-    let from = match source == music::lyrics::LOCAL {
-        true => t!("lyrics-source-local"),
-        false => t!("lyrics-source", source = source),
+    let from = match source {
+        music::lyrics::LOCAL => t!("lyrics-source-local"),
+        music::lyrics::OWN => t!("lyrics-source-own"),
+        _ => t!("lyrics-source", source = source),
     };
     let by = (!writers.is_empty()).then(|| {
         let writers = writers.join(", ");

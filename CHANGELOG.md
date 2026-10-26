@@ -7,6 +7,10 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Right-click any song and pick Use a lyrics file… to show your own `.lrc` for it, synced or not.
+
 ### Changed
 
 - In a tall, narrow window such as a phone-shaped one, the fullscreen player puts the cover, the
@@ -23,6 +27,13 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Typing Arabic or Hebrew in the search box puts the caret where it belongs.
 - YouTube Music libraries with more than about two dozen playlists or albums now show all of
   them. A new playlist no longer drops out of Add to playlist after you sign in again.
+- Album covers in the fullscreen player are sharper with YouTube Music, Subsonic, Spotify and
+  Deezer.
+- The layout previews under Settings, Player bar line up the cover, title and controls.
+- Unsynced lyrics are brighter and a little larger, so they are easier to read.
+- Refreshing your local library picks up songs added, moved or deleted since Sonora started.
+- Dragging the volume slider uses less CPU and GPU.
+- Romanized unsynced lyrics show each line's romanization under that line.
 
 ## [0.44.2] - 2026-10-25
 

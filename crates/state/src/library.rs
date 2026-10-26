@@ -2620,12 +2620,18 @@ impl Library {
 
     /// Drops what a shelf shows and loads it again from its provider, so the page goes back to
     /// its loading state until the new rows land. This is the Refresh a user asks for, while
-    /// `refresh` is the quiet one that keeps rows on screen.
+    /// `refresh` is the quiet one that keeps rows on screen. The local shelf is only as fresh as
+    /// the last scan, so its folders are scanned again first and the shelf loads once that lands.
     pub fn reload(&mut self, shelf: Shelf, cx: &mut Context<Self>) {
-        if shelf == Shelf::Streaming {
-            self.sync_pin_targets(cx);
-        }
         self.held_mut(shelf).stale.clear();
+        match shelf {
+            Shelf::Streaming => self.sync_pin_targets(cx),
+            Shelf::Local if !self.session.read(cx).local_paths().is_empty() => {
+                self.rescan_local(false, cx);
+                return;
+            }
+            Shelf::Local => {}
+        }
         self.load(shelf, cx);
     }
 

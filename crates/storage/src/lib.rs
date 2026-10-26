@@ -76,6 +76,10 @@ const SCHEMA: &str = "
         value TEXT NOT NULL,
         added_at INTEGER NOT NULL,
         PRIMARY KEY (provider, kind, set_id)
+    );
+    CREATE TABLE IF NOT EXISTS lyrics_files (
+        track_key TEXT PRIMARY KEY,
+        path TEXT NOT NULL
     );";
 
 #[derive(Clone)]

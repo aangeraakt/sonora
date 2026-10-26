@@ -2,7 +2,7 @@ use std::borrow::Cow;
 use std::ops::Range;
 use std::time::Duration;
 
-use crate::{LyricsLane, LyricsLine, LyricsWord, Voice};
+use crate::{Lyrics, LyricsLane, LyricsLine, LyricsWord, Voice};
 
 use super::romanize;
 const HOMOGLYPHS: &[(char, char)] = &[
@@ -95,6 +95,62 @@ pub fn parse(lrc: &str) -> Vec<LyricsLine> {
     }
     normalize(&mut lines);
     lines
+}
+
+/// The lyrics in an LRC file someone wrote: timed when its lines carry timestamps that move,
+/// otherwise its words as plain text, with header tags such as `[ar:Artist]` and any timestamps
+/// left out. `None` when it holds no words at all.
+pub fn sheet(text: &str) -> Option<Lyrics> {
+    let text = text.trim_start_matches('\u{feff}');
+    let lines = parse(text);
+    if lines.windows(2).any(|pair| pair[0].start != pair[1].start) {
+        return Some(Lyrics::Synced {
+            lines: lines.into(),
+        });
+    }
+    let kept: Vec<&str> = text
+        .lines()
+        .filter(|line| !header(line))
+        .map(unstamped)
+        .collect();
+    let plain = kept.join("\n");
+    let plain = plain.trim_matches('\n');
+    match plain.trim().is_empty() {
+        true => None,
+        false => Some(Lyrics::plain(plain)),
+    }
+}
+
+/// Whether a line is a header tag such as `[ti:Title]` or `[length:03:12]`, rather than a
+/// timestamp or a sung line.
+fn header(line: &str) -> bool {
+    let line = line.trim();
+    let Some(tag) = line
+        .strip_prefix('[')
+        .and_then(|rest| rest.strip_suffix(']'))
+    else {
+        return false;
+    };
+    let Some((name, _)) = tag.split_once(':') else {
+        return false;
+    };
+    stamp_of(tag).is_none()
+        && !name.is_empty()
+        && name
+            .chars()
+            .all(|letter| letter.is_ascii_alphabetic() || letter == '#')
+}
+
+/// A line with the timestamps in front of it taken off.
+fn unstamped(line: &str) -> &str {
+    let mut rest = line.trim();
+    while let Some((stamp, tail)) = rest.strip_prefix('[').and_then(|body| body.split_once(']')) {
+        if stamp_of(stamp).is_none() {
+            break;
+        }
+        rest = tail.trim_start();
+    }
+    rest
 }
 
 fn offset_of(line: &str) -> Option<i64> {

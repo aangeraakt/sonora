@@ -1,4 +1,5 @@
 mod artist;
+mod attached;
 mod catalog;
 mod cover;
 mod detail;

@@ -13,6 +13,8 @@ use crate::{Lyrics, LyricsHit, LyricsLine, LyricsQuery, LyricsWord};
 
 /// The provider that reads a local file's own tags.
 pub const LOCAL: &str = "Local";
+/// The source of a lyrics file the listener attached to a track themselves.
+pub const OWN: &str = "Own";
 
 const CLOSE_ENOUGH: u64 = 3;
 const WAY_OFF: u64 = 10;
