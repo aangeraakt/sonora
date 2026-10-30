@@ -1,5 +1,6 @@
 mod artist;
 mod attached;
+mod blocklist;
 mod catalog;
 mod cover;
 mod detail;
@@ -44,6 +45,7 @@ mod wake;
 mod window_shape;
 
 pub use artist::{ArtistDetail, ArtistDetailEvent};
+pub use blocklist::{Blocked, Blocklist};
 pub use cover::Cover;
 pub use detail::{Collection, Detail, Header};
 pub use devices::{Devices, Steered, Upcoming};

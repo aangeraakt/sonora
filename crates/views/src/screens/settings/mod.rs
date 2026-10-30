@@ -26,6 +26,7 @@ use crate::shared::text;
 mod about;
 mod accounts;
 mod appearance;
+mod blocked;
 mod connect;
 mod discord;
 mod general;
@@ -98,6 +99,8 @@ enum Slot {
     OfflineMode,
     Sleep,
     StayAwake,
+    Blocklist,
+    BlockedEntries,
     StreamQuality,
     StreamFormat,
     StreamBitrate,
@@ -517,6 +520,7 @@ impl SettingsView {
             SettingsPage::About => self.about_groups(),
             SettingsPage::LyricsSources => self.lyrics_sources_groups(),
             SettingsPage::MusicFolders => self.music_folders_groups(),
+            SettingsPage::Blocked => self.blocked_groups(),
         }
     }
 
@@ -655,7 +659,7 @@ impl SettingsView {
     )]
     fn slot_meta(&self, slot: Slot, cx: &App) -> Option<(SharedString, SharedString)> {
         let meta = match slot {
-            Slot::Folders => return None,
+            Slot::Folders | Slot::BlockedEntries => return None,
             Slot::Startup => (t!("settings-startup"), t!("settings-startup-detail")),
             Slot::Entries => (t!("settings-entries"), t!("settings-entries-detail")),
             Slot::Language => (t!("settings-language"), t!("settings-language-detail")),
@@ -796,6 +800,7 @@ impl SettingsView {
             ),
             Slot::Sleep => (t!("settings-sleep"), t!("settings-sleep-detail")),
             Slot::StayAwake => (t!("settings-stay-awake"), t!("settings-stay-awake-detail")),
+            Slot::Blocklist => (t!("settings-blocklist"), t!("settings-blocklist-detail")),
             Slot::Widevine => (t!("settings-widevine"), self.widevine_detail(cx)),
             Slot::OutputDevice => (
                 t!("settings-output-device"),
@@ -950,6 +955,8 @@ impl SettingsView {
             Slot::StreamBitrate => self.stream_bitrate_row(cx),
             Slot::Sleep => self.sleep_row(cx),
             Slot::StayAwake => self.stay_awake_row(cx),
+            Slot::Blocklist => self.blocklist_row(cx),
+            Slot::BlockedEntries => self.blocked_entries(cx),
             Slot::OutputDevice => self.output_device_row(),
             Slot::OutputFailure => self.output_failure_row(cx),
             Slot::SampleRate => self.sample_rate_row(cx),

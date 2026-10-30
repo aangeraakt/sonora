@@ -261,6 +261,33 @@ fn sift<T>(
     before != tally(past, current, upcoming, source)
 }
 
+/// Drops every entry `blocked` catches from `upcoming`, keeping `manual` and `similar` counting
+/// the hand-queued run that opens it and the suggestions that close it. Says whether anything
+/// went.
+fn unblocked<T>(
+    upcoming: &mut VecDeque<T>,
+    manual: &mut usize,
+    similar: &mut usize,
+    blocked: impl Fn(&T) -> bool,
+) -> bool {
+    let before = upcoming.len();
+    let (opening, closing) = (*manual, before - *similar);
+    let (mut kept_manual, mut kept_similar) = (0, 0);
+    let mut at = 0;
+    upcoming.retain(|item| {
+        let keep = !blocked(item);
+        if keep {
+            kept_manual += usize::from(at < opening);
+            kept_similar += usize::from(at >= closing);
+        }
+        at += 1;
+        keep
+    });
+    *manual = kept_manual;
+    *similar = kept_similar;
+    before != upcoming.len()
+}
+
 fn scramble(upcoming: &mut VecDeque<Entry>, source: &[Entry], current: Option<&Entry>) {
     let known: HashSet<&str> = source.iter().filter_map(Entry::id).collect();
     let mut entries: Vec<Entry> = upcoming
@@ -464,7 +491,10 @@ impl Queue {
         self.set_shuffle(!self.shuffle, cx);
     }
 
+    /// Settles every change: blocked tracks leave what is still to play, the history is
+    /// capped, and the queue is saved and redrawn.
     fn changed(&mut self, cx: &mut Context<Self>) {
+        self.drop_blocked(cx);
         trim(&mut self.past, PAST_LIMIT);
         self.revision = self.revision.wrapping_add(1);
         self.remember(cx);
@@ -544,6 +574,28 @@ impl Queue {
             |entry| local(&entry.track),
         );
         if suggested || sifted {
+            self.changed(cx);
+        }
+    }
+
+    /// Takes every blocked track out of what is still to play. The current track and the
+    /// history stay, so the caller decides whether to skip what is playing.
+    fn drop_blocked(&mut self, cx: &App) -> bool {
+        let blocklist = self.settings.read(cx).blocklist();
+        if blocklist.is_empty() {
+            return false;
+        }
+        unblocked(
+            &mut self.upcoming,
+            &mut self.manual,
+            &mut self.similar,
+            |entry| blocklist.blocks(&entry.track),
+        )
+    }
+
+    /// Applies a blocklist that just grew to what is queued.
+    pub fn sift_blocked(&mut self, cx: &mut Context<Self>) {
+        if self.drop_blocked(cx) {
             self.changed(cx);
         }
     }
@@ -1039,7 +1091,11 @@ impl Queue {
     }
 
     pub fn previous(&mut self, cx: &mut Context<Self>) -> Option<Track> {
-        let index = self.past.iter().rposition(|entry| entry.track.playable)?;
+        let blocklist = self.settings.read(cx).blocklist();
+        let index = self
+            .past
+            .iter()
+            .rposition(|entry| entry.track.playable && !blocklist.blocks(&entry.track))?;
         self.play_past(index, cx)
     }
 
@@ -1122,8 +1178,9 @@ mod tests {
 
     use super::{
         Entry, gap_target, hydrate, in_order, local, move_item, record, restore, scramble,
-        select_past, select_upcoming, sift, stub, trim,
+        select_past, select_upcoming, sift, stub, trim, unblocked,
     };
+    use crate::{Blocked, Blocklist};
 
     fn track(id: &str) -> Track {
         Track {
@@ -1434,6 +1491,68 @@ mod tests {
         assert_eq!(past, [1]);
         assert_eq!(current, Some(2));
         assert_eq!(upcoming, [3]);
+    }
+
+    fn by(id: &str, artist: &str) -> Entry {
+        let mut entry = entry(id);
+        entry.track.artists = artist.to_owned();
+        entry.track.artist_refs = vec![ArtistRef {
+            name: artist.to_owned(),
+            id: Some(format!("{artist}-id")),
+        }];
+        entry
+    }
+
+    #[test]
+    fn blocking_drops_matching_tracks_from_every_run() {
+        // two hand-queued, two from the source, two suggestions
+        let mut upcoming: VecDeque<Entry> = [
+            by("m1", "Liked"),
+            by("m2", "Disliked"),
+            by("s1", "Disliked"),
+            by("s2", "Liked"),
+            by("r1", "Liked"),
+            by("r2", "Liked"),
+        ]
+        .into();
+        let (mut manual, mut similar) = (2, 2);
+        let mut blocklist = Blocklist::default();
+        blocklist.add(Blocked::artist(Some("Disliked-id".into()), "Disliked"));
+        blocklist.add(Blocked::song(&upcoming[4].track).unwrap());
+
+        assert!(unblocked(
+            &mut upcoming,
+            &mut manual,
+            &mut similar,
+            |entry| { blocklist.blocks(&entry.track) }
+        ));
+        assert_eq!(ids(&upcoming), ["m1", "s2", "r2"]);
+        assert_eq!((manual, similar), (1, 1));
+    }
+
+    #[test]
+    fn an_unblocked_queue_is_left_as_it_was() {
+        let mut upcoming: VecDeque<Entry> = listing(4).into();
+        let (mut manual, mut similar) = (1, 1);
+
+        assert!(!unblocked(&mut upcoming, &mut manual, &mut similar, |_| {
+            false
+        }));
+        assert_eq!(upcoming.len(), 4);
+        assert_eq!((manual, similar), (1, 1));
+    }
+
+    #[test]
+    fn blocking_a_whole_run_empties_its_count() {
+        let mut upcoming: VecDeque<Entry> =
+            [by("m", "Liked"), by("s", "Liked"), by("r", "Disliked")].into();
+        let (mut manual, mut similar) = (1, 1);
+
+        unblocked(&mut upcoming, &mut manual, &mut similar, |entry| {
+            entry.track.artists == "Disliked"
+        });
+        assert_eq!(ids(&upcoming), ["m", "s"]);
+        assert_eq!((manual, similar), (1, 0));
     }
 
     #[test]
