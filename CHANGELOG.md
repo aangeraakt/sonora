@@ -10,7 +10,17 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Scrobble to your own ListenBrainz server or to multi-scrobbler by filling in the server address when you connect ListenBrainz.
+- Name your Discord status after the album artist under Settings, Discord, Status name.
 - Hover a cut-off track title in the player bar to read it in full.
+- YouTube Music artist pages list the artist's music videos after their popular songs, and song search finds music videos too.
+- Show a local file's own cover on the Discord status, uploaded for 3 hours to uguu.se like Subsonic covers. Turn it off under Settings, Discord.
+- Browse Tidal's moods and decades from Explore after the genres, and open each one to see its shelves.
+
+### Fixed
+
+- On Linux with WebKitGTK 2.54 or newer, signing in to Apple Music no longer fills all your memory and crashes Sonora before the sign-in page loads.
+- Tidal artists with no portrait show the album cover Tidal draws them with, instead of an empty picture.
+- Releases tagged with the label `[no label]` no longer show a copyright line crediting it.
 
 ## [0.49.1] - 2026-11-13
 
