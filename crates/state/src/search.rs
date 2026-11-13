@@ -9,7 +9,8 @@ use music::{Album, ArtistRef, MusicApi, Playlist, SavedArtist, Track};
 use crate::{Io, Library, Network, Session, SessionEvent, Shelf, join};
 
 const DEBOUNCE: Duration = Duration::from_millis(250);
-const LIMIT: usize = 20;
+/// How many hits the search page lists, and how many local matches a queue takes at most.
+pub(crate) const LIMIT: usize = 20;
 const EXACT: u32 = 100;
 const PREFIX: u32 = 80;
 const WORD: u32 = 60;
@@ -63,7 +64,7 @@ pub struct PlaylistHit {
 
 #[derive(Clone)]
 pub enum Hit {
-    Song(Track),
+    Song(Box<Track>),
     Artist(ArtistHit),
     Album(AlbumHit),
     Playlist(PlaylistHit),
@@ -460,7 +461,7 @@ impl Search {
 /// Loads the linked item's metadata without changing the active provider or playback.
 async fn linked_hit(client: &dyn MusicApi, linked: Linked) -> Result<Hit> {
     match linked {
-        Linked::Track(id) => Ok(Hit::Song(client.track(&id).await?)),
+        Linked::Track(id) => Ok(Hit::Song(Box::new(client.track(&id).await?))),
         Linked::Artist(id) => {
             let artist = client.artist(&id).await?;
             Ok(Hit::Artist(ArtistHit {
@@ -539,6 +540,31 @@ pub(crate) fn rank(
     all.into_iter().map(|scored| scored.hit).collect()
 }
 
+/// The hits of `kind` for `asked` in the local library alone, best first and at most `take` of
+/// them. `play local` and `queue local` ask this, so they find what the search page finds on
+/// the local library, with no provider searched.
+pub(crate) fn matching(
+    tracks: &[Track],
+    albums: &[Album],
+    playlists: &[Playlist],
+    asked: &str,
+    kind: Kind,
+    take: usize,
+) -> Vec<Hit> {
+    rank(
+        tracks,
+        albums,
+        playlists,
+        &Catalog::default(),
+        &HashMap::new(),
+        asked,
+    )
+    .into_iter()
+    .filter(|hit| hit.kind() == kind)
+    .take(take)
+    .collect()
+}
+
 fn songs(library: &[Track], catalog: &[Track], query: &Query) -> Vec<Scored> {
     let mut scored: Vec<Scored> = Vec::new();
 
@@ -559,7 +585,7 @@ fn songs(library: &[Track], catalog: &[Track], query: &Query) -> Vec<Scored> {
         scored.push(Scored {
             score,
             popularity: track.popularity,
-            hit: Hit::Song(track.clone()),
+            hit: Hit::Song(Box::new(track.clone())),
         });
     }
 
@@ -677,7 +703,8 @@ fn playlists_of(playlists: &[Playlist], catalog: &[Playlist], query: &Query) -> 
 
 /// The artists that fit `query`. The ones the provider's artist search found rank by their whole
 /// place in its answer, as found songs do. Artists drawn from songs get only part of their song's
-/// place, so they come after the found ones unless their name fits the query better.
+/// place, so they come after the found ones unless their name fits the query better. A plain video
+/// channel credited on a track or album is never offered as an artist.
 fn artists(
     library: &[Track],
     catalog: &Catalog,
@@ -729,11 +756,12 @@ fn artists(
         let artist = ArtistRef {
             name: found.name.clone(),
             id: Some(found.id.clone()),
+            channel: false,
         };
         record(&artist, found.cover.as_ref(), score, 0, 0);
     }
     for (track, rank) in sources(library, &catalog.tracks) {
-        for artist in &track.artist_refs {
+        for artist in track.artist_refs.iter().filter(|artist| !artist.channel) {
             let Some(score) = favored(named(&artist.name, query), rank).max(inherited(rank)) else {
                 continue;
             };
@@ -742,7 +770,7 @@ fn artists(
         }
     }
     for album in albums {
-        for artist in &album.artist_refs {
+        for artist in album.artist_refs.iter().filter(|artist| !artist.channel) {
             let Some(score) = favored(named(&artist.name, query), None) else {
                 continue;
             };
@@ -894,6 +922,7 @@ mod tests {
                 .map(|name| ArtistRef {
                     name: name.to_owned(),
                     id: None,
+                    channel: false,
                 })
                 .collect(),
             album: album.to_owned(),
@@ -1062,5 +1091,62 @@ mod tests {
             panic!("expected an artist hit");
         };
         assert_eq!(artist.cover.as_deref(), Some("https://portrait"));
+    }
+
+    fn local_album(id: &str, name: &str, artists: &str) -> Album {
+        Album {
+            id: id.to_owned(),
+            name: name.to_owned(),
+            artists: artists.to_owned(),
+            ..Default::default()
+        }
+    }
+
+    #[test]
+    fn local_matching_finds_a_song_of_its_kind() {
+        let library = [rhapsody()];
+        let hits = matching(&library, &[], &[], "rhapsody", Kind::Song, 1);
+        assert_eq!(titles(&hits), vec!["Bohemian Rhapsody"]);
+    }
+
+    #[test]
+    fn local_matching_finds_an_album_of_its_kind() {
+        let albums = [local_album("album-a", "A Night at the Opera", "Queen")];
+        let hits = matching(&[], &albums, &[], "night opera", Kind::Album, 1);
+        assert_eq!(count(&hits, Kind::Album), 1);
+        assert!(matches!(&hits[0], Hit::Album(album) if album.id == "album-a"));
+    }
+
+    #[test]
+    fn local_matching_finds_an_artist_of_its_kind() {
+        let library = [rhapsody()];
+        let hits = matching(&library, &[], &[], "queen", Kind::Artist, 1);
+        assert!(matches!(&hits[0], Hit::Artist(artist) if artist.name == "Queen"));
+    }
+
+    #[test]
+    fn local_matching_leaves_out_other_kinds() {
+        let library = [rhapsody()];
+        let hits = matching(&library, &[], &[], "queen", Kind::Album, 20);
+        assert!(hits.iter().all(|hit| hit.kind() == Kind::Album));
+    }
+
+    #[test]
+    fn local_matching_takes_at_most_the_asked_number() {
+        let library = [
+            track("Night Train", "Echo", "One"),
+            track("Night Owl", "Echo", "Two"),
+        ];
+        let hits = matching(&library, &[], &[], "night", Kind::Song, 1);
+        assert_eq!(hits.len(), 1);
+    }
+
+    #[test]
+    fn local_matching_is_empty_when_nothing_fits() {
+        let library = [rhapsody()];
+        let albums = [local_album("album-a", "A Night at the Opera", "Queen")];
+        assert!(matching(&library, &albums, &[], "zzzz", Kind::Song, 20).is_empty());
+        assert!(matching(&library, &albums, &[], "zzzz", Kind::Album, 20).is_empty());
+        assert!(matching(&library, &albums, &[], "zzzz", Kind::Artist, 20).is_empty());
     }
 }
